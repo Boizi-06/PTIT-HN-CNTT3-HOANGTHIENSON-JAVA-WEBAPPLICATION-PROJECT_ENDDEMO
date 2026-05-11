@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title th:text="${movie.title}">
+        Movie Detail
+    </title>
+
+    <!-- Bootstrap -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          rel="stylesheet">
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            background:
+                    linear-gradient(rgba(5,10,20,0.96), rgba(5,10,20,0.98)),
+                    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1974')
+                    center/cover fixed;
+
+            color:white;
+            font-family:'Poppins',sans-serif;
+            min-height:100vh;
+            overflow-x:hidden;
+        }
+
+        /* NAVBAR */
+
+        .navbar{
+            background: rgba(10,10,15,0.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 0;
+        }
+
+        .navbar-brand{
+            font-size:1.7rem;
+            font-weight:700;
+            letter-spacing:1px;
+        }
+
+        .nav-link{
+            color:rgba(255,255,255,0.75)!important;
+            margin:0 10px;
+            font-weight:500;
+            position:relative;
+            transition:0.3s;
+        }
+
+        .nav-link:hover{
+            color:white!important;
+        }
+
+        .nav-link::after{
+            content:'';
+            width:0;
+            height:2px;
+            background:#e50914;
+            position:absolute;
+            left:0;
+            bottom:-5px;
+            transition:0.3s;
+        }
+
+        .nav-link:hover::after{
+            width:100%;
+        }
+
+        .profile-btn{
+            background: rgba(255,255,255,0.06);
+            border-radius: 50px;
+            padding: 8px 18px;
+            transition: 0.3s;
+        }
+
+        .profile-btn:hover{
+            background: rgba(255,255,255,0.1);
+        }
+
+        .member-badge{
+            background: linear-gradient(90deg,#f59e0b,#fbbf24);
+            color:black;
+            padding:3px 10px;
+            border-radius:999px;
+            font-size:0.7rem;
+            font-weight:700;
+        }
+
+        .dropdown-menu{
+            background:#111827;
+            border-radius:16px;
+            border:1px solid rgba(255,255,255,0.08);
+            overflow:hidden;
+        }
+
+        .dropdown-item{
+            color:white;
+            padding:12px 16px;
+        }
+
+        .dropdown-item:hover{
+            background:rgba(255,255,255,0.08);
+            color:white;
+        }
+
+        /* PAGE */
+
+        .page-container{
+            padding-top:120px;
+            padding-bottom:70px;
+        }
+
+        .glass-card{
+            background: rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.08);
+            border-radius:32px;
+            backdrop-filter:blur(18px);
+            overflow:hidden;
+            box-shadow:0 20px 50px rgba(0,0,0,0.45);
+        }
+
+        /* POSTER */
+
+        .poster-wrapper{
+            position:relative;
+            height:100%;
+            overflow:hidden;
+        }
+
+        .movie-poster{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            transition:0.5s;
+        }
+
+        .poster-wrapper:hover .movie-poster{
+            transform:scale(1.05);
+        }
+
+        .poster-overlay{
+            position:absolute;
+            inset:0;
+            background:linear-gradient(to top,
+            rgba(0,0,0,0.75),
+            rgba(0,0,0,0.05));
+        }
+
+        /* CONTENT */
+
+        .movie-content{
+            padding:50px;
+        }
+
+        .movie-title{
+            font-size:3.4rem;
+            font-weight:800;
+            margin-bottom:25px;
+        }
+
+        .movie-meta{
+            color:rgba(255,255,255,0.72);
+            margin-top:15px;
+            font-size:1.05rem;
+        }
+
+        .movie-meta i{
+            color:#e50914;
+        }
+
+        .description{
+            margin-top:35px;
+            line-height:2;
+            color:rgba(255,255,255,0.86);
+            font-size:1rem;
+        }
+
+        /* SECTION */
+
+        .section-title{
+            font-size:2.2rem;
+            font-weight:700;
+            margin-bottom:35px;
+            position:relative;
+        }
+
+        .section-title::after{
+            content:'';
+            width:70px;
+            height:4px;
+            border-radius:999px;
+            background:#e50914;
+            position:absolute;
+            left:0;
+            bottom:-12px;
+        }
+
+        /* SHOWTIME */
+
+        .showtime-card{
+            background: rgba(255,255,255,0.06);
+            border-radius:24px;
+            padding:28px;
+            transition:0.35s;
+            border:1px solid rgba(255,255,255,0.08);
+            height:100%;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .showtime-card::before{
+            content:'';
+            position:absolute;
+            width:150px;
+            height:150px;
+            background:rgba(229,9,20,0.12);
+            border-radius:50%;
+            top:-60px;
+            right:-60px;
+            filter:blur(20px);
+        }
+
+        .showtime-card:hover{
+            transform:translateY(-8px);
+            background: rgba(255,255,255,0.09);
+            box-shadow:0 20px 40px rgba(0,0,0,0.35);
+        }
+
+        .showtime-time{
+            font-size:1.5rem;
+            font-weight:700;
+            margin-bottom:12px;
+        }
+
+        .showtime-meta{
+            color:rgba(255,255,255,0.72);
+            margin-bottom:10px;
+        }
+
+        /* BUTTON */
+
+        .btn-book{
+            background: linear-gradient(90deg,#e50914,#ff4d4d);
+            border:none;
+            border-radius:16px;
+            padding:13px 28px;
+            color:white;
+            font-weight:600;
+            transition:0.3s;
+            text-decoration:none;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            margin-top:15px;
+            box-shadow:0 12px 25px rgba(229,9,20,0.35);
+        }
+
+        .btn-book:hover{
+            transform:translateY(-4px);
+            box-shadow:0 18px 35px rgba(229,9,20,0.55);
+            color:white;
+        }
+
+        /* EMPTY */
+
+        .empty-card{
+            padding:70px 30px;
+            text-align:center;
+        }
+
+        .empty-icon{
+            font-size:5rem;
+            margin-bottom:25px;
+            color:#ef4444;
+        }
+
+        /* PRICE */
+
+        .price-card{
+            background: rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.08);
+            border-radius:24px;
+            padding:35px;
+            text-align:center;
+            transition:0.3s;
+            height:100%;
+        }
+
+        .price-card:hover{
+            transform:translateY(-6px);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .price-icon{
+            font-size:3rem;
+            margin-bottom:20px;
+        }
+
+        .price-title{
+            font-size:1.4rem;
+            font-weight:700;
+            margin-bottom:15px;
+        }
+
+        .price-value{
+            font-size:2.4rem;
+            font-weight:800;
+        }
+
+        /* SCROLLBAR */
+
+        ::-webkit-scrollbar{
+            width:10px;
+        }
+
+        ::-webkit-scrollbar-thumb{
+            background:#e50914;
+            border-radius:20px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:992px){
+
+            .movie-title{
+                font-size:2.5rem;
+            }
+
+            .movie-content{
+                padding:35px;
+            }
+
+        }
+
+        @media(max-width:768px){
+
+            .movie-title{
+                font-size:2rem;
+            }
+
+            .movie-content{
+                padding:25px;
+            }
+
+            .section-title{
+                font-size:1.8rem;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+
+    <div class="container">
+
+        <a class="navbar-brand" href="/">
+
+            <i class="fas fa-film text-danger me-2"></i>
+
+            SMART CINEMA
+
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse"
+             id="navbarNav">
+
+            <ul class="navbar-nav mx-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/movies">
+                        Phim
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/showtimes">
+                        Suất chiếu
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/promotions">
+                        Khuyến mãi
+                    </a>
+                </li>
+
+            </ul>
+
+            <div class="d-flex align-items-center"
+                 sec:authorize="isAuthenticated()">
+
+                <div class="dropdown">
+
+                    <button class="btn text-white border-0 profile-btn d-flex align-items-center gap-3"
+                            type="button"
+                            data-bs-toggle="dropdown">
+
+                        <i class="fas fa-user-circle fa-2x text-secondary"></i>
+
+                        <div class="text-start">
+
+                            <div class="fw-medium"
+                                 th:text="${@userHelper.getFullName(#authentication)}">
+                            </div>
+
+
+                            <span class="member-badge">
+                                MEMBER
+                            </span>
+
+                        </div>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        <li>
+                            <a class="dropdown-item"
+                               th:href="@{/profile}">
+
+                                <i class="fas fa-user me-2"></i>
+
+                                Thông tin cá nhân
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                               th:href="@{/member-card}">
+
+                                <i class="fas fa-id-card me-2"></i>
+
+                                Thẻ thành viên
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider border-secondary">
+                        </li>
+
+                        <li>
+
+                            <form th:action="@{/logout}" method="post">
+
+                                <button type="submit"
+                                        class="dropdown-item text-danger">
+
+                                    <i class="fas fa-sign-out-alt me-2"></i>
+
+                                    Đăng xuất
+
+                                </button>
+
+                            </form>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- PAGE -->
+
+<div class="container page-container">
+
+    <!-- MOVIE -->
+
+    <div class="glass-card mb-5">
+
+        <div class="row g-0">
+
+            <!-- POSTER -->
+
+            <div class="col-lg-4">
+
+                <div class="poster-wrapper">
+
+                    <img th:src="${movie.posterUrl}"
+                         class="movie-poster">
+
+                    <div class="poster-overlay"></div>
+
+                </div>
+
+            </div>
+
+            <!-- CONTENT -->
+
+            <div class="col-lg-8">
+
+                <div class="movie-content">
+
+                    <h1 class="movie-title"
+                        th:text="${movie.title}">
+                    </h1>
+
+                    <div class="movie-meta">
+
+                        <i class="fas fa-film me-2"></i>
+
+                        <span th:text="${movie.genre?.name}"></span>
+
+                        <span class="mx-3">|</span>
+
+                        <i class="fas fa-clock me-2"></i>
+
+                        <span th:text="${movie.duration}"></span>
+
+                        phút
+
+                    </div>
+
+                    <div class="movie-meta">
+
+                        <i class="fas fa-calendar-alt me-2"></i>
+
+                        Khởi chiếu:
+
+                        <span th:text="${movie.releaseDate}"></span>
+
+                    </div>
+
+                    <div class="description"
+                         th:text="${movie.description}">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SHOWTIMES -->
+
+    <h2 class="section-title">
+        Suất chiếu
+    </h2>
+
+    <!-- EMPTY -->
+
+    <div th:if="${#lists.isEmpty(showtimes)}">
+
+        <div class="glass-card empty-card">
+
+            <div class="empty-icon">
+                <i class="fas fa-face-sad-tear"></i>
+            </div>
+
+            <h3 class="fw-bold mb-3">
+                Hiện chưa có suất chiếu
+            </h3>
+
+            <p class="text-secondary mb-0">
+                Vui lòng quay lại sau để cập nhật lịch chiếu mới nhất.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- SHOWTIME LIST -->
+
+    <div th:if="${!#lists.isEmpty(showtimes)}">
+
+        <div class="row g-4">
+
+            <div class="col-md-6"
+                 th:each="showtime : ${showtimes}">
+
+                <div class="showtime-card">
+
+                    <div class="showtime-time">
+
+                        <i class="fas fa-clock me-2 text-danger"></i>
+
+                        <span th:text="${#temporals.format(showtime.startTime,'HH:mm')}">
+                        </span>
+
+                    </div>
+
+                    <div class="showtime-meta">
+
+                        <i class="fas fa-calendar me-2"></i>
+
+                        <span th:text="${#temporals.format(showtime.startTime,'dd/MM/yyyy')}">
+                        </span>
+
+                    </div>
+
+                    <div class="showtime-meta">
+
+                        <i class="fas fa-door-open me-2"></i>
+
+                        Phòng:
+
+                        <span th:text="${showtime.room.name}">
+                        </span>
+
+                    </div>
+
+                    <div class="showtime-meta">
+
+                        <i class="fas fa-hourglass-end me-2"></i>
+
+                        Kết thúc:
+
+                        <span th:text="${#temporals.format(showtime.endTime,'HH:mm')}">
+                        </span>
+
+                    </div>
+
+                    <a th:href="@{/booking/{id}(id=${showtime.id})}"
+                       class="btn-book">
+
+                        <i class="fas fa-ticket-alt"></i>
+
+                        Đặt vé ngay
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PRICE -->
+
+        <div class="glass-card mt-5 p-5">
+
+            <h2 class="section-title mb-5">
+                Bảng giá vé
+            </h2>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+
+                    <div class="price-card">
+
+                        <div class="price-icon text-light">
+
+                            <i class="fas fa-couch"></i>
+
+                        </div>
+
+                        <div class="price-title">
+                            Ghế thường
+                        </div>
+
+                        <div class="price-value text-success">
+                            80.000đ
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="price-card">
+
+                        <div class="price-icon text-warning">
+
+                            <i class="fas fa-crown"></i>
+
+                        </div>
+
+                        <div class="price-title">
+                            Ghế VIP
+                        </div>
+
+                        <div class="price-value text-danger">
+                            120.000đ
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
