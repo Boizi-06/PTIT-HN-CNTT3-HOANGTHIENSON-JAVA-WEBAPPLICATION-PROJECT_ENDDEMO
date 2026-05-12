@@ -154,12 +154,12 @@
     Người dùng
   </a>
 
-  <a href="#">
-    <i class="bi bi-bar-chart"></i>
-    Doanh thu
-  </a>
+    <a href="/admin/revenue" >
+        <i class="bi bi-bar-chart"></i> Doanh thu
+    </a>
 
-  <a href="#">
+
+    <a href="#">
     <i class="bi bi-gear"></i>
     Cài đặt
   </a>
@@ -272,33 +272,41 @@
             Trạng thái booking
           </h5>
 
-          <!-- CONFIRMED -->
-          <span th:if="${booking.status.name() == 'CONFIRMED'}"
-                class="badge bg-success badge-status">
+            <!-- PENDING -->
+            <span th:if="${booking.status.name() == 'PENDING'}"
+                  class="badge rounded-pill bg-warning text-dark badge-status">
 
-                        CONFIRMED
-                    </span>
+    <i class="bi bi-hourglass-split"></i>
+    Chờ xử lý
 
-          <!-- PENDING -->
-          <span th:if="${booking.status.name() == 'PENDING'}"
-                class="badge bg-warning text-dark badge-status">
+</span>
 
-                        PENDING
-                    </span>
+            <!-- CONFIRMED -->
+            <span th:if="${booking.status.name() == 'CONFIRMED'}"
+                  class="badge rounded-pill bg-primary badge-status">
 
-          <!-- CANCELLED -->
-          <span th:if="${booking.status.name() == 'CANCELLED'}"
-                class="badge bg-danger badge-status">
+    <i class="bi bi-check-circle"></i>
+    Đã xác nhận
 
-                        CANCELLED
-                    </span>
+</span>
 
-          <!-- COMPLETED -->
-          <span th:if="${booking.status.name() == 'COMPLETED'}"
-                class="badge bg-primary badge-status">
+            <!-- COMPLETED -->
+            <span th:if="${booking.status.name() == 'COMPLETED'}"
+                  class="badge rounded-pill bg-success badge-status">
 
-                        COMPLETED
-                    </span>
+    <i class="bi bi-check2-all"></i>
+    Hoàn thành
+
+</span>
+
+            <!-- CANCELLED -->
+            <span th:if="${booking.status.name() == 'CANCELLED'}"
+                  class="badge rounded-pill bg-danger badge-status">
+
+    <i class="bi bi-x-circle"></i>
+    Đã hủy
+
+</span>
 
           <hr class="border-light my-4">
 

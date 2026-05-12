@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Smart Cinema</title>
+    <title>BOIZI Cinema</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,29 +26,47 @@
         }
 
         body{
-            font-family: 'Poppins', sans-serif;
-            background:
-                    linear-gradient(rgba(5,10,20,0.96), rgba(5,10,20,0.98)),
-                    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1974')
-                    center/cover fixed;
-            color: white;
-            overflow-x: hidden;
-        }
+    font-family: 'Poppins', sans-serif;
+
+    background:
+        radial-gradient(circle at top left,
+        rgba(229,9,20,0.18),
+        transparent 30%),
+
+        radial-gradient(circle at bottom right,
+        rgba(255,255,255,0.06),
+        transparent 25%),
+
+        linear-gradient(
+        135deg,
+        #0f172a,
+        #111827,
+        #0b1120);
+
+    color: white;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
 
      /* NAVBAR */
 
 .navbar{
-    background: rgba(10,10,15,0.88);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    padding: 14px 0;
+    background: rgba(15,23,42,0.72);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 16px 0;
     transition: 0.3s;
 }
 
 .navbar-brand{
-    font-size: 1.7rem;
+    font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.navbar-brand:hover{
+    transform: scale(1.03);
 }
 
 .nav-link{
@@ -117,67 +135,111 @@
 
         /* HERO */
 
-        .hero{
-            min-height: 92vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            position: relative;
-        }
+     .hero{
+    min-height: 100vh;
 
-        .hero::before{
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: rgba(229,9,20,0.18);
-            filter: blur(120px);
-            top: -100px;
-            right: -100px;
-            z-index: 0;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+        rgba(10,10,20,0.55),
+        rgba(10,10,20,0.75)),
+
+        url('https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=2070')
+        center/cover no-repeat;
+}
 
         .hero-content{
-            position: relative;
-            z-index: 1;
-        }
+    position: relative;
+    z-index: 2;
 
-        .hero h1{
-            font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
+    padding: 60px;
 
-        .hero p{
-            font-size: 1.3rem;
-            color: rgba(255,255,255,0.75);
-        }
+    border-radius: 30px;
 
-        .hero-btn{
-            margin-top: 30px;
-            padding: 15px 45px;
-            border-radius: 50px;
-            font-weight: 600;
-            border: none;
-            background: linear-gradient(90deg,#e50914,#ff4d4d);
-            transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(229,9,20,0.35);
-        }
+    background: rgba(255,255,255,0.05);
+
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.35);
+}
+
+     .hero h1{
+    font-size: 6rem;
+    font-weight: 900;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 20px;
+
+    background:
+        url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1974')
+        center/cover;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow:
+        0 0 40px rgba(255,255,255,0.15);
+}
+
+.hero p{
+    font-size: 1.2rem;
+
+    color: rgba(255,255,255,0.88);
+
+    max-width: 720px;
+
+    margin: auto;
+
+    line-height: 1.9;
+}
+
+       .hero-btn{
+    margin-top: 40px;
+    padding: 16px 48px;
+    border-radius: 999px;
+    font-weight: 700;
+    border: none;
+
+    background:
+        linear-gradient(
+        135deg,
+        #e50914,
+        #ff4d4d);
+
+    transition: 0.35s;
+
+    box-shadow:
+        0 10px 40px rgba(229,9,20,0.4);
+}
 
         .hero-btn:hover{
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(229,9,20,0.5);
-        }
+    transform: translateY(-5px) scale(1.03);
+
+    box-shadow:
+        0 18px 50px rgba(229,9,20,0.6);
+}
 
         /* SECTION */
 
         .section-title{
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            position: relative;
-        }
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 35px;
+    position: relative;
+}
 
         .section-title::after{
             content: '';
@@ -192,14 +254,45 @@
 
         /* MOVIE CARD */
 
-        .movie-card{
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 22px;
-            overflow: hidden;
-            transition: all 0.35s ease;
-            backdrop-filter: blur(8px);
-        }
+      .movie-card{
+    background: rgba(255,255,255,0.06);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 26px;
+
+    overflow: hidden;
+
+    transition: all 0.4s ease;
+
+    backdrop-filter: blur(18px);
+
+    position: relative;
+}
+.movie-card::before{
+    content: '';
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+        180deg,
+        rgba(255,255,255,0.08),
+        transparent);
+
+    opacity: 0;
+
+    transition: 0.4s;
+}
+
+.movie-card:hover{
+    transform: translateY(-12px);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.45);
+}
 
         .movie-card:hover{
             transform: translateY(-10px);
@@ -212,11 +305,11 @@
         }
 
         .movie-poster img{
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-            transition: 0.4s;
-        }
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    transition: 0.5s;
+}
 
         .movie-card:hover img{
             transform: scale(1.06);
@@ -245,35 +338,52 @@
             font-size: 0.9rem;
         }
 
-        .btn-ticket{
-            width: 100%;
-            margin-top: 15px;
-            border: none;
-            border-radius: 12px;
-            padding: 10px;
-            background: linear-gradient(90deg,#e50914,#ff4d4d);
-            transition: 0.3s;
-            font-weight: 600;
-        }
+       .btn-ticket{
+    width: 100%;
+    margin-top: 18px;
+    border: none;
+    border-radius: 14px;
+    padding: 12px;
 
-        .btn-ticket:hover{
-            transform: scale(1.02);
-        }
+    background:
+        linear-gradient(
+        135deg,
+        #e50914,
+        #ff4d4d);
+
+    transition: 0.3s;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 8px 20px rgba(229,9,20,0.25);
+}
+.btn-ticket:hover{
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(229,9,20,0.4);
+}
 
         /* PROMOTION */
 
-        .promo-card{
-            border-radius: 22px;
-            padding: 24px;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-            transition: 0.3s;
-        }
+       .promo-card{
+    border-radius: 24px;
+    padding: 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
 
-        .promo-card:hover{
-            transform: translateY(-6px);
-        }
+    backdrop-filter: blur(20px);
+
+    transition: 0.35s;
+}
+.promo-card:hover{
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.3);
+}
 
         .promo-red{
             background: linear-gradient(135deg,#e50914,#ff4d4d);
@@ -338,7 +448,86 @@
             background: #e50914;
             border-radius: 20px;
         }
+        @keyframes fadeUp{
+    from{
+        opacity: 0;
+        transform: translateY(30px);
+    }
 
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content,
+.movie-card,
+.promo-card{
+    animation: fadeUp 0.8s ease;
+}
+        @media(max-width:768px){
+
+    .hero h1{
+        font-size: 3.5rem;
+    }
+
+    .hero p{
+        font-size: 1rem;
+    }
+
+    .section-title{
+        font-size: 1.8rem;
+    }
+
+    .movie-poster img{
+        height: 340px;
+    }
+
+}
+.hero-stats{
+    margin-top: 40px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+}
+
+.glass-stat{
+    padding: 14px 24px;
+
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.08);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter: blur(20px);
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.glass-stat:hover{
+    transform: translateY(-5px);
+
+    background: rgba(255,255,255,0.12);
+}
+        .hero-content{
+    padding: 30px;
+}
+
+.hero h1{
+    font-size: 3.5rem;
+}
+
+.hero-stats{
+    gap: 12px;
+}
     </style>
 </head>
 
@@ -500,6 +689,21 @@
             MUA VÉ NGAY
 
         </a>
+        <div class="hero-stats">
+
+            <div class="glass-stat">
+                🎬 120+ Phim Hot
+            </div>
+
+            <div class="glass-stat">
+                🍿 Combo Premium
+            </div>
+
+            <div class="glass-stat">
+                ⭐ 4.9/5 Đánh giá
+            </div>
+
+        </div>
 
     </div>
 

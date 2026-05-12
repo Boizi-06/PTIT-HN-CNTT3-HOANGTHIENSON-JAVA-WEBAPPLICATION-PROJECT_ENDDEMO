@@ -2,6 +2,7 @@ package com.example.movietheater.controller;
 
 import com.example.movietheater.entity.*;
 import com.example.movietheater.repository.*;
+import com.example.movietheater.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,7 @@ public class AdminController {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
+    private final BookingService bookingService;
 
     // ====================== DASHBOARD ======================
 
@@ -37,7 +39,7 @@ public class AdminController {
         long totalMovies = movieRepository.count();
 
         // 2. Tổng số người dùng
-        long totalUsers = userRepository.count();
+        long totalUsers = userRepository.findAllNotAdmin().toArray().length;
 
         // 3. Vé đã bán trong tháng này
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
@@ -46,16 +48,30 @@ public class AdminController {
         long ticketsThisMonth = ticketRepository.countByBookingBookingTimeAfter(startOfMonthTime);
 
         // 4. Doanh thu tháng này
-        Double revenueThisMonth = bookingRepository.calculateRevenueThisMonth(startOfMonthTime);
-        if (revenueThisMonth == null) revenueThisMonth = 0.0;
+        // Tổng doanh thu hệ thống
+        Double totalRevenue =
+                bookingRepository.getTotalSystemRevenue();
+
+        // Nếu null -> 0
+        if (totalRevenue == null) {
+
+            totalRevenue = 0.0;
+        }
+
+        model.addAttribute(
+                "totalRevenue",
+                totalRevenue
+        );
 
         // 5. Danh sách phim gần đây (8 phim mới nhất)
         List<Movie> recentMovies = movieRepository.findTop8ByOrderByReleaseDateDesc();
 
+
+
         model.addAttribute("totalMovies", totalMovies);
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("ticketsThisMonth", ticketsThisMonth);
-        model.addAttribute("revenueThisMonth", revenueThisMonth);
+        model.addAttribute("totalRevenue", totalRevenue);
         model.addAttribute("movies", recentMovies);
 
         return "admin/dashboard";

@@ -31,6 +31,49 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByUserIdWithTickets(Long userId);
 
 
-    @Query("SELECT SUM(b.totalAmount) FROM Booking b WHERE b.bookingTime >= :startTime AND b.status = 'CONFIRMED'")
+    @Query("""
+    SELECT SUM(b.totalAmount)
+    FROM Booking b
+    WHERE b.bookingTime >= :startTime
+    AND b.status = 'CONFIRMED'
+""")
     Double calculateRevenueThisMonth(@Param("startTime") LocalDateTime startTime);
+
+
+
+
+    @Query("""
+    SELECT 
+        m.id,
+        m.title,
+        SUM(b.totalAmount)
+    FROM Booking b
+    JOIN b.showtime s
+    JOIN s.movie m
+    WHERE b.status = 'CONFIRMED'
+    GROUP BY m.id, m.title
+    ORDER BY SUM(b.totalAmount) DESC
+""")
+    List<Object[]> getRevenueByMovie();
+
+
+    @Query("""
+    SELECT b FROM Booking b
+    JOIN b.showtime s
+    JOIN s.movie m
+    WHERE m.id = :movieId
+    ORDER BY b.bookingTime DESC
+""")
+    List<Booking> findByMovieId(@Param("movieId") Long movieId);
+
+
+
+    @Query("""
+    SELECT SUM(b.totalAmount)
+    FROM Booking b
+    WHERE b.status = 'CONFIRMED'
+""")
+    Double getTotalSystemRevenue();
+
+
 }

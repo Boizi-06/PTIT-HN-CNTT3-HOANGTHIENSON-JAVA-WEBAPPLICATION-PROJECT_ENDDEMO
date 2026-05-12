@@ -25,7 +25,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             response.sendRedirect("/admin/dashboard");
         }
         else if (roles.contains("ROLE_STAFF")) {
-            response.sendRedirect("/staff/dashboard");
+            response.sendRedirect("/admin/dashboard");
         }
         else {
             response.sendRedirect("/home");           // Customer hoặc các role khác
