@@ -2,6 +2,8 @@ package com.example.movietheater.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Entity
@@ -21,8 +23,9 @@ public class Movie {
     private String posterUrl;        // ← Phải có dòng này
 
     private String trailerUrl;
-    private LocalDate releaseDate;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate releaseDate;
     @ManyToOne
     @JoinColumn(name = "genre_id")
     private Genre genre;

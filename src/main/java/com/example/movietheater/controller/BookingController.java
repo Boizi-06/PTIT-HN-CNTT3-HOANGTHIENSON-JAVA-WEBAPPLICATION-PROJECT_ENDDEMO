@@ -45,12 +45,19 @@ public class BookingController {
         );
 
         // LẤY DANH SÁCH GHẾ ĐÃ ĐẶT
-        List<Long> bookedSeatIds = bookingService.getBookedSeatIdsForShowtime(showtimeId);
+        List<Long> bookedSeatIds =
+                bookingService.getBookedSeatIdsForShowtime(showtimeId);
 
         // CẬP NHẬT TRẠNG THÁI GHẾ
         for (Seat seat : seats) {
+
             if (bookedSeatIds.contains(seat.getId())) {
+
                 seat.setStatus(SeatStatus.BOOKED);
+
+            } else {
+
+                seat.setStatus(SeatStatus.AVAILABLE);
             }
         }
 
@@ -59,53 +66,95 @@ public class BookingController {
 
         return "user/booking";
     }
+
     // =========================
-    // XỬ LÝ ĐẶT VÉ
+    // TRANG XÁC NHẬN ĐẶT VÉ
     // =========================
 
     @PostMapping("/confirm")
     public String confirmBooking(
             @RequestParam Long showtimeId,
             @RequestParam List<Long> seatIds,
-            Authentication authentication,
             Model model
     ) {
 
-        try {
+        Showtime showtime = showtimeRepository
+                .findById(showtimeId)
+                .orElseThrow();
 
-            User user = userRepository
-                    .findByUsername(authentication.getName())
-                    .orElseThrow();
+        List<Seat> selectedSeats =
+                seatRepository.findAllById(seatIds);
 
-            // LƯU KẾT QUẢ BOOKING
-            Booking booking = bookingService.bookSeats(
-                    user,
-                    showtimeId,
-                    seatIds
-            );
+        double totalPrice = 0;
 
-            // CHUYỂN TỚI SUCCESS PAGE
-            return "redirect:/booking/success/" + booking.getId();
+        for (Seat seat : selectedSeats) {
 
-        } catch (Exception e) {
+            String seatName = seat.getSeatName();
 
-            model.addAttribute("error", e.getMessage());
+            // VIP
+            if (seatName.startsWith("C")
+                    || seatName.startsWith("D")) {
 
-            Showtime showtime = showtimeRepository
-                    .findById(showtimeId)
-                    .orElseThrow();
+                totalPrice += 120000;
 
-            model.addAttribute("showtime", showtime);
+            }
 
-            model.addAttribute(
-                    "seats",
-                    seatRepository.findByRoomId(
-                            showtime.getRoom().getId()
-                    )
-            );
+            // COUPLE
+            else if (seatName.startsWith("E")) {
 
-            return "user/booking";
+                totalPrice += 180000;
+
+            }
+
+            // STANDARD
+            else {
+
+                totalPrice += 80000;
+            }
         }
+
+        model.addAttribute("showtime", showtime);
+
+        model.addAttribute(
+                "selectedSeats",
+                selectedSeats
+        );
+
+        model.addAttribute(
+                "seatIds",
+                seatIds
+        );
+
+        model.addAttribute(
+                "totalPrice",
+                totalPrice
+        );
+
+        return "user/booking-confirm";
+    }
+
+    // =========================
+    // THANH TOÁN
+    // =========================
+
+    @PostMapping("/payment")
+    public String payment(
+            @RequestParam Long showtimeId,
+            @RequestParam List<Long> seatIds,
+            Authentication authentication
+    ) {
+
+        User user = userRepository
+                .findByUsername(authentication.getName())
+                .orElseThrow();
+
+        Booking booking = bookingService.bookSeats(
+                user,
+                showtimeId,
+                seatIds
+        );
+
+        return "redirect:/booking/success/" + booking.getId();
     }
 
     // =========================

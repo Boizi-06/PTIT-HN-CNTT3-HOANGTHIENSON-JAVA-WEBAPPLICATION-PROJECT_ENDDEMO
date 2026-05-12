@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Xác nhận vé</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <style>
+
+    body{
+        background:#0f172a;
+        color:white;
+        font-family:sans-serif;
+    }
+
+    .confirm-card{
+        background:#1e293b;
+        border-radius:20px;
+        padding:40px;
+        margin-top:60px;
+    }
+
+    .seat-badge{
+        background:#dc2626;
+        padding:10px 18px;
+        border-radius:999px;
+        margin-right:10px;
+        font-size:18px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="confirm-card">
+
+    <h1 class="mb-4">
+      Xác nhận đặt vé
+    </h1>
+
+    <h3 th:text="${showtime.movie.title}"></h3>
+
+    <p>
+      Phòng:
+      <span th:text="${showtime.room.name}"></span>
+    </p>
+
+    <p>
+      Suất chiếu:
+      <span th:text="${#temporals.format(showtime.startTime,'dd/MM/yyyy HH:mm')}"></span>
+    </p>
+
+    <hr>
+
+    <h4 class="mb-3">
+      Ghế đã chọn
+    </h4>
+
+    <div class="mb-4">
+
+            <span class="seat-badge"
+                  th:each="seat : ${selectedSeats}"
+                  th:text="${seat.seatName}">
+            </span>
+
+    </div>
+
+    <h2 class="text-success mb-4">
+
+      Tổng tiền:
+      <span th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA',0,'POINT')}"></span>
+      đ
+
+    </h2>
+
+    <!-- THANH TOÁN -->
+
+    <form th:action="@{/booking/payment}"
+          method="post">
+
+      <input type="hidden"
+             name="showtimeId"
+             th:value="${showtime.id}">
+
+      <input type="hidden"
+             th:each="seatId : ${seatIds}"
+             name="seatIds"
+             th:value="${seatId}">
+
+      <button class="btn btn-danger btn-lg">
+        Thanh toán
+      </button>
+
+      <a th:href="@{/movies/{id}(id=${showtime.movie.id})}"
+         class="btn btn-secondary btn-lg"
+         onclick="return confirm('Bạn có chắc muốn hủy đặt vé?')">
+
+        Hủy đặt vé
+
+      </a>
+    </form>
+
+  </div>
+
+</div>
+
+</body>
+</html>

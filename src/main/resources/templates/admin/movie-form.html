@@ -54,7 +54,47 @@
 
     <div class="form-card">
         <!-- ✅ SỬA LOGIC: DÙNG CHUNG /save cho cả thêm và sửa -->
-        <form th:action="@{/admin/movies/save}" method="post" th:object="${movie}">
+        <form th:action="@{/admin/movies/save}"
+              method="post"
+              enctype="multipart/form-data"
+              th:object="${movie}">
+            <!-- ERROR ALERT -->
+            <div th:if="${error}"
+                 class="alert alert-danger alert-dismissible fade show shadow-sm border-0 rounded-4 d-flex align-items-center mb-4"
+                 role="alert">
+
+                <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+
+                <div class="flex-grow-1">
+                    <span th:text="${error}"></span>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+            <!-- SUCCESS ALERT -->
+            <div th:if="${success}"
+                 class="alert alert-success alert-dismissible fade show shadow-sm border-0 rounded-4 d-flex align-items-center mb-4"
+                 role="alert">
+
+                <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+
+                <div class="flex-grow-1">
+                    <span th:text="${success}"></span>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                </button>
+
+            </div>
 
             <input type="hidden" th:field="*{id}">
 
@@ -89,9 +129,32 @@
                 <!-- Preview Poster -->
                 <div class="col-md-4">
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Poster URL</label>
-                        <input type="text" class="form-control" th:field="*{posterUrl}"
-                               id="posterUrl" placeholder="https://..." oninput="previewPoster()">
+
+                        <label class="form-label fw-bold">
+                            Poster URL
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{posterUrl}"
+                               id="posterUrl"
+                               placeholder="https://..."
+                               oninput="previewPosterUrl()">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            Hoặc tải ảnh lên
+                        </label>
+
+                        <input type="file"
+                               class="form-control"
+                               name="posterFile"
+                               accept="image/*"
+                               onchange="previewPosterFile(event)">
+
                     </div>
                     <div class="text-center">
                         <img id="posterPreview"
@@ -129,11 +192,38 @@
 </div>
 
 <script>
-    function previewPoster() {
-        const url = document.getElementById('posterUrl').value.trim();
-        const previewImg = document.getElementById('posterPreview');
-        previewImg.src = url ? url : 'https://via.placeholder.com/300x420?text=Poster+Preview';
+
+    function previewPosterUrl() {
+
+        const url =
+            document.getElementById('posterUrl').value.trim();
+
+        const previewImg =
+            document.getElementById('posterPreview');
+
+        if(url !== '') {
+            previewImg.src = url;
+        }
     }
+
+    function previewPosterFile(event) {
+
+        const file = event.target.files[0];
+
+        if(file) {
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+
+                document.getElementById('posterPreview')
+                    .src = e.target.result;
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

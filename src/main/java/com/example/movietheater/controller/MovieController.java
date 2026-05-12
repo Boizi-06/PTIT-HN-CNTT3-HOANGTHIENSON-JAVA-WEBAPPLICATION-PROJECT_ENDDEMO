@@ -28,7 +28,7 @@ public class MovieController {
 
         model.addAttribute(
                 "movies",
-                movieRepository.findAll()
+                movieRepository.findByActiveTrueOrderByReleaseDateDesc()
         );
 
         return "user/home";
