@@ -140,4 +140,58 @@ public class BookingService {
     public List<Long> getBookedSeatIdsForShowtime(Long showtimeId) {
         return ticketRepository.findBookedSeatIdsByShowtimeId(showtimeId);
     }
+
+
+
+    @Transactional
+    public void cancelBooking(Long bookingId, User user) {
+
+        Booking booking = bookingRepository
+                .findById(bookingId)
+                .orElseThrow(() ->
+                        new RuntimeException("Không tìm thấy booking"));
+
+        // CHECK CHỦ SỞ HỮU
+        if (!booking.getUser().getId().equals(user.getId())) {
+
+            throw new RuntimeException(
+                    "Bạn không có quyền hủy vé này"
+            );
+        }
+
+        // CHECK ĐÃ HỦY CHƯA
+        if (booking.getStatus() == BookingStatus.CANCELLED) {
+
+            throw new RuntimeException(
+                    "Vé đã được hủy trước đó"
+            );
+        }
+
+        // CHECK QUÁ 24H
+        LocalDateTime cancelDeadline =
+                booking.getBookingTime().plusDays(1);
+
+        if (LocalDateTime.now().isAfter(cancelDeadline)) {
+
+            throw new RuntimeException(
+                    "Đã quá thời gian hủy vé (24 giờ)"
+            );
+        }
+
+        // UPDATE STATUS
+        booking.setStatus(BookingStatus.CANCELLED);
+
+        bookingRepository.save(booking);
+
+        // MỞ LẠI SUẤT CHIẾU
+        Showtime showtime = booking.getShowtime();
+
+        if (!showtime.isActive()) {
+
+            showtime.setActive(true);
+
+            showtimeRepository.save(showtime);
+        }
+    }
+
 }

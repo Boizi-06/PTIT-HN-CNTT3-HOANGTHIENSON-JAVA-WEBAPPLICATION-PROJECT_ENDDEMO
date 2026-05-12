@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -25,6 +26,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
         WHERE t.showtime.id = :showtimeId
     """)
     List<Long> findBookedSeatIdsByShowtimeId(@Param("showtimeId") Long showtimeId);
+    void deleteByBookingId(Long bookingId);
 
     long countByShowtimeId(Long showtimeId);
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.booking.bookingTime >= :startTime")
+    long countByBookingBookingTimeAfter(@Param("startTime") LocalDateTime startTime);
 }

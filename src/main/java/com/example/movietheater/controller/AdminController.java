@@ -25,15 +25,38 @@ public class AdminController {
     private final RoomRepository roomRepository;
     private final GenreRepository genreRepository;
     private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
+    private final TicketRepository ticketRepository;
 
     // ====================== DASHBOARD ======================
 
     @GetMapping("/dashboard")
     public String adminDashboard(Model model) {
 
-        model.addAttribute("totalMovies", movieRepository.count());
-        model.addAttribute("totalShowtimes", showtimeRepository.count());
-        model.addAttribute("totalBookings", bookingRepository.count());
+        // 1. Tổng số phim
+        long totalMovies = movieRepository.count();
+
+        // 2. Tổng số người dùng
+        long totalUsers = userRepository.count();
+
+        // 3. Vé đã bán trong tháng này
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDateTime startOfMonthTime = startOfMonth.atStartOfDay();
+
+        long ticketsThisMonth = ticketRepository.countByBookingBookingTimeAfter(startOfMonthTime);
+
+        // 4. Doanh thu tháng này
+        Double revenueThisMonth = bookingRepository.calculateRevenueThisMonth(startOfMonthTime);
+        if (revenueThisMonth == null) revenueThisMonth = 0.0;
+
+        // 5. Danh sách phim gần đây (8 phim mới nhất)
+        List<Movie> recentMovies = movieRepository.findTop8ByOrderByReleaseDateDesc();
+
+        model.addAttribute("totalMovies", totalMovies);
+        model.addAttribute("totalUsers", totalUsers);
+        model.addAttribute("ticketsThisMonth", ticketsThisMonth);
+        model.addAttribute("revenueThisMonth", revenueThisMonth);
+        model.addAttribute("movies", recentMovies);
 
         return "admin/dashboard";
     }

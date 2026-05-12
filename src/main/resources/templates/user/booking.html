@@ -201,7 +201,7 @@
 
     <a class="navbar-brand" href="/">
       <i class="fas fa-film text-danger me-2"></i>
-      SMART CINEMA
+      BOIZI CINEMA
     </a>
 
     <button class="navbar-toggler"
@@ -225,8 +225,11 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/showtimes">
-            Suất chiếu
+          <a th:href="@{/booking/history}"
+             class="nav-link">
+
+            Lịch sử đặt vé
+
           </a>
         </li>
 
@@ -333,49 +336,7 @@
 
     <!-- PROGRESS -->
 
-    <div class="booking-progress">
 
-      <div class="progress-step progress-active">
-
-        <div class="progress-circle">
-          1
-        </div>
-
-        <div>
-          Chọn ghế
-        </div>
-
-      </div>
-
-      <div class="progress-line"></div>
-
-      <div class="progress-step">
-
-        <div class="progress-circle">
-          2
-        </div>
-
-        <div>
-          Thanh toán
-        </div>
-
-      </div>
-
-      <div class="progress-line"></div>
-
-      <div class="progress-step">
-
-        <div class="progress-circle">
-          3
-        </div>
-
-        <div>
-          Hoàn tất
-        </div>
-
-      </div>
-
-    </div>
 
     <!-- MOVIE -->
 

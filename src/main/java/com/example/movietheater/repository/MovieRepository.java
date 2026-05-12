@@ -11,4 +11,5 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> findByActiveTrue();
     List<Movie> findByActiveTrueOrderByReleaseDateDesc();
     List<Movie> findAllByOrderByReleaseDateDesc();
+    List<Movie> findTop8ByOrderByReleaseDateDesc();
 }

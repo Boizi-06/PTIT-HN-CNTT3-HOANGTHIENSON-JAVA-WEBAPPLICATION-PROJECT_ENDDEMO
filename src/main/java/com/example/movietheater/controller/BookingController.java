@@ -1,20 +1,22 @@
 package com.example.movietheater.controller;
 
+import com.example.movietheater.eenum.BookingStatus;
 import com.example.movietheater.eenum.SeatStatus;
 import com.example.movietheater.entity.Booking;
 import com.example.movietheater.entity.Seat;
 import com.example.movietheater.entity.Showtime;
 import com.example.movietheater.entity.User;
-import com.example.movietheater.repository.SeatRepository;
-import com.example.movietheater.repository.ShowtimeRepository;
-import com.example.movietheater.repository.UserRepository;
+import com.example.movietheater.repository.*;
 import com.example.movietheater.service.BookingService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -26,6 +28,11 @@ public class BookingController {
     private final SeatRepository seatRepository;
     private final UserRepository userRepository;
     private final BookingService bookingService;
+    private final BookingRepository bookingRepository;
+    private final TicketRepository ticketRepository;
+
+
+
 
     // =========================
     // TRANG CHỌN GHẾ
@@ -170,5 +177,113 @@ public class BookingController {
         model.addAttribute("bookingId", bookingId);
 
         return "user/booking-success";
+    }
+    // =========================
+// LỊCH SỬ ĐẶT VÉ
+// =========================
+
+    @GetMapping("/history")
+    public String bookingHistory(
+            Authentication authentication,
+            Model model
+    ) {
+
+        User user = userRepository
+                .findByUsername(authentication.getName())
+                .orElseThrow();
+
+        // Dùng query có fetch join
+        List<Booking> bookings = bookingRepository
+                .findByUserIdWithTickets(user.getId());
+
+        model.addAttribute("bookings", bookings);
+
+        return "user/booking-history";
+    }
+
+
+
+
+    // =========================
+// HỦY BOOKING
+// =========================
+
+    @PostMapping("/cancel/{bookingId}")
+    @Transactional
+    public String cancelBooking(
+            @PathVariable Long bookingId,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        User user = userRepository
+                .findByUsername(authentication.getName())
+                .orElseThrow();
+
+        Booking booking = bookingRepository
+                .findById(bookingId)
+                .orElseThrow();
+
+        // CHECK ĐÚNG USER
+        if (!booking.getUser().getId().equals(user.getId())) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Bạn không có quyền hủy vé này!"
+            );
+
+            return "redirect:/booking/history";
+        }
+
+        // CHECK ĐÃ HỦY CHƯA
+        if (booking.getStatus() == BookingStatus.CANCELLED) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Vé này đã bị hủy trước đó!"
+            );
+
+            return "redirect:/booking/history";
+        }
+
+        // CHECK QUÁ 24H
+        if (booking.getBookingTime()
+                .plusDays(1)
+                .isBefore(LocalDateTime.now())) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Đã quá thời gian hủy vé!"
+            );
+
+            return "redirect:/booking/history";
+        }
+
+        // ===== XÓA TICKET =====
+
+        ticketRepository.deleteByBookingId(
+                booking.getId()
+        );
+
+        // ===== UPDATE STATUS =====
+
+        booking.setStatus(BookingStatus.CANCELLED);
+
+        bookingRepository.save(booking);
+
+        // ===== MỞ LẠI SUẤT CHIẾU =====
+
+        Showtime showtime = booking.getShowtime();
+
+        showtime.setActive(true);
+
+        showtimeRepository.save(showtime);
+
+        redirectAttributes.addFlashAttribute(
+                "success",
+                "Hủy vé thành công!"
+        );
+
+        return "redirect:/booking/history";
     }
 }
