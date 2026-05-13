@@ -5,487 +5,346 @@
   <meta charset="UTF-8">
   <title>Xác nhận vé - BOIZI CINEMA</title>
 
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+
+    :root{
+      --bg:#020817;
+      --bg2:#0f172a;
+      --primary:#ef4444;
+      --primary2:#dc2626;
+      --text:#fff;
+      --muted:rgba(255,255,255,0.7);
+      --glass:rgba(255,255,255,0.08);
+      --border:rgba(255,255,255,0.12);
     }
 
-    body {
-      font-family: 'Poppins', sans-serif;
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      font-family:'Poppins',sans-serif;
+      background:linear-gradient(135deg,#020617,#071126,#0f172a);
+      color:white;
+      min-height:100vh;
+    }
+
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
       background:
-        linear-gradient(rgba(5,10,20,0.96), rgba(5,10,20,0.98)),
-        url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1974')
-        center/cover fixed;
-      color: white;
-      overflow-x: hidden;
-      min-height: 100vh;
+        radial-gradient(circle at top left, rgba(239,68,68,0.18), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(59,130,246,0.12), transparent 40%);
+      z-index:-1;
     }
 
-    /* NAVBAR - Copy từ home */
-    .navbar {
-      background: rgba(10,10,15,0.88);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      padding: 14px 0;
-      transition: 0.3s;
+    /* NAVBAR */
+    .navbar{
+      height:90px;
+      background:rgba(2,6,23,0.75);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(255,255,255,0.06);
     }
 
-    .navbar-brand {
-      font-size: 1.7rem;
-      font-weight: 700;
-      letter-spacing: 1px;
+    .navbar-brand{
+      font-weight:800;
+      font-size:1.6rem;
     }
 
-    .nav-link {
-      color: rgba(255,255,255,0.75) !important;
-      margin: 0 10px;
-      font-weight: 500;
-      position: relative;
-      transition: 0.3s;
+    .nav-link{
+      color:rgba(255,255,255,0.75)!important;
+      border-radius:12px;
+      padding:10px 16px!important;
     }
 
-    .nav-link:hover {
-      color: white !important;
+    .nav-link:hover{
+      background:rgba(255,255,255,0.08);
+      color:#fff!important;
     }
 
-    .nav-link::after {
-      content: '';
-      width: 0;
-      height: 2px;
-      background: #e50914;
-      position: absolute;
-      left: 0;
-      bottom: -5px;
-      transition: 0.3s;
+    /* PAGE */
+    .page{
+      padding-top:140px;
+      padding-bottom:60px;
     }
 
-    .nav-link:hover::after {
-      width: 100%;
+    /* GLASS CARD */
+    .glass{
+      background:var(--glass);
+      border:1px solid var(--border);
+      backdrop-filter:blur(20px);
+      border-radius:28px;
+      padding:40px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.35);
     }
 
-    /* CONFIRM CARD - Style mới đồng bộ */
-    .confirm-section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 120px 0 60px;
-      position: relative;
+    .title{
+      font-size:2.2rem;
+      font-weight:800;
+      margin-bottom:30px;
+      text-align:center;
     }
 
-    .confirm-section::before {
-      content: '';
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      background: rgba(229,9,20,0.18);
-      filter: blur(120px);
-      top: -100px;
-      right: -100px;
-      z-index: 0;
+    .title::after{
+      content:'';
+      display:block;
+      width:80px;
+      height:4px;
+      background:var(--primary);
+      margin:15px auto 0;
+      border-radius:999px;
     }
 
-    .confirm-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 22px;
-      padding: 40px;
-      backdrop-filter: blur(16px);
-      position: relative;
-      z-index: 1;
-      max-width: 700px;
-      margin: 0 auto;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
+    /* INFO */
+    .info-box{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.08);
+      padding:20px;
+      border-radius:18px;
+      margin-bottom:20px;
     }
 
-    .confirm-card:hover {
-      transform: translateY(-8px);
+    .label{
+      color:var(--muted);
+      font-size:0.9rem;
     }
 
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      margin-bottom: 30px;
-      position: relative;
-      text-align: center;
+    .value{
+      font-size:1.2rem;
+      font-weight:600;
     }
 
-    .section-title::after {
-      content: '';
-      width: 80px;
-      height: 4px;
-      background: #e50914;
-      position: absolute;
-      left: 50%;
-      bottom: -15px;
-      transform: translateX(-50%);
-      border-radius: 999px;
+    /* SEATS */
+    .seat-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      padding:20px;
+      background:rgba(255,255,255,0.03);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.08);
+      margin:20px 0;
     }
 
-    .movie-info {
-      background: rgba(255,255,255,0.03);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 30px;
-      border: 1px solid rgba(255,255,255,0.08);
+    .seat{
+      padding:10px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#ef4444,#dc2626);
+      font-weight:700;
     }
 
-    .info-label {
-      color: rgba(255,255,255,0.6);
-      font-weight: 500;
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
-
-    .info-value {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: white;
-    }
-
-    /* SEAT BADGES - Style mới đẹp hơn */
-    .seats-container {
-      background: rgba(255,255,255,0.03);
-      border-radius: 16px;
-      padding: 24px;
-      margin: 30px 0;
-      border: 1px solid rgba(255,255,255,0.08);
-      min-height: 100px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .seat-badge {
-      background: linear-gradient(135deg, #e50914, #ff4d4d);
-      color: white;
-      padding: 12px 20px;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      box-shadow: 0 8px 20px rgba(229,9,20,0.3);
-      transition: all 0.3s ease;
-      border: none;
-    }
-
-    .seat-badge:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 25px rgba(229,9,20,0.4);
-    }
-
-    .total-price {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      margin: 30px 0;
-      box-shadow: 0 15px 35px rgba(16,185,129,0.3);
-    }
-
-    .total-price h2 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin: 0;
-      background: linear-gradient(45deg, white, rgba(255,255,255,0.9));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    /* PRICE */
+    .price{
+      text-align:center;
+      padding:25px;
+      border-radius:20px;
+      background:linear-gradient(135deg,#10b981,#059669);
+      margin:25px 0;
+      font-size:2rem;
+      font-weight:900;
     }
 
     /* BUTTONS */
-    .btn-payment {
-      width: 100%;
-      padding: 16px;
-      border-radius: 16px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      border: none;
-      background: linear-gradient(90deg, #e50914, #ff4d4d);
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(229,9,20,0.4);
-      margin-bottom: 16px;
+    .btn-pay{
+      width:100%;
+      padding:14px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      border:none;
+      font-weight:700;
     }
 
-    .btn-payment:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(229,9,20,0.6);
+    .btn-cancel{
+      width:100%;
+      margin-top:12px;
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.15);
+      color:white;
     }
+    /* BACKGROUND POSTER */
+.poster-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px) brightness(0.35);
+  transform: scale(1.1);
+}
 
-    .btn-cancel {
-      width: 100%;
-      padding: 16px;
-      border-radius: 16px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border: 2px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.05);
-      color: white;
-      transition: all 0.3s ease;
-    }
+/* LỚP overlay tối */
+.poster-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at top, rgba(0,0,0,0.3), rgba(0,0,0,0.9));
+}
+    .glass{
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(22px);
+  border-radius: 30px;
+  padding: 45px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.6);
+  max-width: 900px;
+  margin: auto;
+}
+    .title{
+  font-size: 2.6rem;
+  font-weight: 900;
+  text-align: center;
+  background: linear-gradient(90deg,#fff,#f43f5e,#fff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+    .info-box{
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 18px 22px;
+  border-radius: 16px;
+  transition: 0.3s;
+}
 
-    .btn-cancel:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.4);
-      color: white;
-      transform: translateY(-2px);
-    }
+.info-box:hover{
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.08);
+}
+    .price{
+  text-align:center;
+  padding:30px;
+  border-radius:20px;
+  background: linear-gradient(135deg,#16a34a,#22c55e);
+  font-size:2.4rem;
+  font-weight:900;
+  box-shadow: 0 15px 40px rgba(34,197,94,0.3);
+}
+    .btn-pay{
+  width:100%;
+  padding:16px;
+  border-radius:16px;
+  background: linear-gradient(135deg,#ef4444,#f97316);
+  border:none;
+  font-weight:800;
+  letter-spacing:1px;
+  transition:0.3s;
+}
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .confirm-card {
-        margin: 20px;
-        padding: 24px;
-      }
+.btn-pay:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(239,68,68,0.4);
+}
 
-      .section-title {
-        font-size: 1.8rem;
-      }
-
-      .total-price h2 {
-        font-size: 2rem;
-      }
-
-      .seats-container {
-        padding: 20px;
-      }
-    }
-
-    /* SCROLLBAR */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #e50914;
-      border-radius: 20px;
-    }
   </style>
 </head>
 
 <body>
+<div class="poster-bg"
+     th:style="'background-image:url(' + ${showtime.movie.posterUrl} + ')'">
+</div>
 
-<!-- NAVBAR - Copy nguyên từ home -->
+<div class="poster-overlay"></div>
+
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container">
-    <a class="navbar-brand" href="/">
-      <i class="fas fa-film text-danger me-2"></i>
-      BOIZI CINEMA
+    <a class="navbar-brand text-white" href="/">
+      <i class="fas fa-film text-danger me-2"></i> BOIZI CINEMA
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/movies">Phim</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/booking/history}" class="nav-link">Lịch sử đặt vé</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/promotions">Khuyến mãi</a>
-        </li>
-      </ul>
-    </div>
   </div>
 </nav>
 
-<!-- CONFIRM SECTION -->
-<section class="confirm-section">
-  <div class="container">
-    <div class="confirm-card">
+<!-- PAGE -->
+<div class="container page">
 
-      <!-- TITLE -->
-      <h1 class="section-title">
-        <i class="fas fa-check-circle text-success me-3"></i>
-        Xác nhận đặt vé
-      </h1>
+  <div class="glass">
 
-      <!-- MOVIE INFO -->
-      <div class="movie-info">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="info-label">🎬 Phim</div>
-            <div class="info-value" th:text="${showtime.movie.title}"></div>
-          </div>
-          <div class="col-md-4">
-            <div class="info-label">📺 Phòng</div>
-            <div class="info-value" th:text="${showtime.room.name}"></div>
-          </div>
-        </div>
-        <hr class="my-3 opacity-25">
-        <div class="row">
-          <div class="col-12">
-            <div class="info-label">⏰ Suất chiếu</div>
-            <div class="info-value" th:text="${#temporals.format(showtime.startTime,'dd/MM/yyyy HH:mm')}"></div>
-          </div>
-        </div>
-      </div>
+    <h1 class="title">
+      <i class="fas fa-ticket-alt text-danger me-2"></i>
+      Xác nhận đặt vé
+    </h1>
 
-      <!-- SEATS -->
-      <h4 class="mb-4 text-center">
-        <i class="fas fa-chair text-warning me-2"></i>
-        Ghế đã chọn
-      </h4>
-      <div class="seats-container">
-        <span class="seat-badge"
-              th:each="seat : ${selectedSeats}"
-              th:text="${seat.seatName}">
-        </span>
-      </div>
-
-      <!-- TOTAL PRICE -->
-      <div class="total-price">
-        <h2>
-          <i class="fas fa-wallet me-2"></i>
-          <span th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA',0,'POINT')}"></span> đ
-        </h2>
-        <div class="mt-2" style="font-size: 1.1rem; opacity: 0.9;">
-          Tổng tiền vé
-        </div>
-      </div>
-
-      <!-- THANH TOÁN FORM - GIỮ NGUYÊN LOGIC -->
-      <form id="paymentForm"
-            th:action="@{/booking/payment}"
-            method="post">
-        <input type="hidden" name="showtimeId" th:value="${showtime.id}">
-        <input type="hidden" th:each="seatId : ${seatIds}" name="seatIds" th:value="${seatId}">
-
-        <button type="button"
-                class="btn btn-payment"
-                data-bs-toggle="modal"
-                data-bs-target="#paymentModal">
-          <i class="fas fa-credit-card me-2"></i>
-          THANH TOÁN NGAY
-        </button>
-
-        <button type="button"
-                class="btn btn-cancel"
-                data-bs-toggle="modal"
-                data-bs-target="#cancelModal">
-          <i class="fas fa-times me-2"></i>
-          HỦY ĐẶT VÉ
-        </button>
-      </form>
-
+    <!-- INFO -->
+    <div class="info-box">
+      <div class="label">Phim</div>
+      <div class="value" th:text="${showtime.movie.title}"></div>
     </div>
-  </div>
-</section>
-<!-- MODAL XÁC NHẬN THANH TOÁN -->
-<div class="modal fade" id="paymentModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark text-white border border-danger rounded-4">
 
-      <div class="modal-header border-0">
-        <h5 class="modal-title">
-          <i class="fas fa-credit-card text-danger me-2"></i>
-          Xác nhận thanh toán
-        </h5>
-        <button type="button" class="btn-close btn-close-white"
-                data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body text-center py-4">
-        <i class="fas fa-ticket-alt text-danger"
-           style="font-size: 60px;"></i>
-
-        <h4 class="mt-4 fw-bold">
-          Bạn muốn thanh toán vé này?
-        </h4>
-
-        <p class="text-light opacity-75 mt-3">
-          Sau khi thanh toán ghế sẽ được giữ cho bạn.
-        </p>
-      </div>
-
-      <div class="modal-footer border-0">
-        <button type="button"
-                class="btn btn-secondary rounded-pill px-4"
-                data-bs-dismiss="modal">
-          Hủy
-        </button>
-
-        <button type="button"
-                class="btn btn-danger rounded-pill px-4"
-                id="confirmPaymentBtn">
-          Xác nhận
-        </button>
-      </div>
-
+    <div class="info-box">
+      <div class="label">Phòng</div>
+      <div class="value" th:text="${showtime.room.name}"></div>
     </div>
+
+    <div class="info-box">
+      <div class="label">Suất chiếu</div>
+      <div class="value"
+           th:text="${#temporals.format(showtime.startTime,'dd/MM/yyyy HH:mm')}"></div>
+    </div>
+
+    <!-- SEATS -->
+    <h5 class="text-center mt-4 mb-3">
+      Ghế đã chọn
+    </h5>
+
+    <div class="seat-wrap">
+      <span class="seat"
+            th:each="seat : ${selectedSeats}"
+            th:text="${seat.seatName}">
+      </span>
+    </div>
+
+    <!-- PRICE -->
+    <div class="price">
+      <span th:text="${#numbers.formatDecimal(totalPrice,0,'COMMA',0,'POINT')}"></span> đ
+    </div>
+
+    <!-- FORM -->
+    <form id="paymentForm" th:action="@{/booking/payment}" method="post">
+
+      <input type="hidden" name="showtimeId" th:value="${showtime.id}">
+      <input type="hidden" th:each="seatId : ${seatIds}" name="seatIds" th:value="${seatId}">
+
+      <button type="submit" class="btn btn-pay">
+        THANH TOÁN
+      </button>
+
+      <button type="button"
+              class="btn btn-cancel"
+              data-bs-toggle="modal"
+              data-bs-target="#cancelModal">
+        HỦY VÉ
+      </button>
+
+    </form>
+
   </div>
 </div>
 
 
-<!-- MODAL HỦY ĐẶT VÉ -->
-<div class="modal fade" id="cancelModal" tabindex="-1">
+
+<!-- MODAL CANCEL -->
+<div class="modal fade" id="cancelModal">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark text-white border border-light rounded-4">
-
-      <div class="modal-header border-0">
-        <h5 class="modal-title">
-          <i class="fas fa-times-circle text-warning me-2"></i>
-          Hủy đặt vé
-        </h5>
-
-        <button type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body text-center py-4">
-        <i class="fas fa-exclamation-triangle text-warning"
-           style="font-size: 60px;"></i>
-
-        <h4 class="mt-4 fw-bold">
-          Bạn chắc chắn muốn hủy?
-        </h4>
-
-        <p class="text-light opacity-75 mt-3">
-          Ghế đã chọn sẽ bị mất sau khi hủy.
-        </p>
-      </div>
-
-      <div class="modal-footer border-0">
-        <button type="button"
-                class="btn btn-secondary rounded-pill px-4"
-                data-bs-dismiss="modal">
-          Quay lại
-        </button>
-
+    <div class="modal-content bg-dark text-white rounded-4">
+      <div class="modal-body text-center p-4">
+        <i class="fas fa-times-circle text-warning fa-3x"></i>
+        <h4 class="mt-3">Bạn chắc chắn muốn hủy?</h4>
         <a th:href="@{/movies/{id}(id=${showtime.movie.id})}"
-           class="btn btn-warning rounded-pill px-4">
+           class="btn btn-warning mt-3">
           Xác nhận hủy
         </a>
       </div>
-
     </div>
   </div>
 </div>
-<!-- JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  document
-    .getElementById("confirmPaymentBtn")
-    .addEventListener("click", function () {
 
-      document.getElementById("paymentForm").submit();
 
-    });
-</script>
 
 </body>
 </html>

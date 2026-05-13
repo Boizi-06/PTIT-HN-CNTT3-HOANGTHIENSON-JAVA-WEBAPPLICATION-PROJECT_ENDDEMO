@@ -48,7 +48,21 @@
     .member-badge{ background: linear-gradient(90deg,#f59e0b,#fbbf24); color:black; padding:3px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; }
 
     .booking-container{ padding-top:120px; padding-bottom:60px; }
-    .glass-card{ background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(14px); border-radius:28px; padding:40px; box-shadow:0 10px 40px rgba(0,0,0,0.45); }
+    .glass-card{
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    border-radius: 32px;
+    overflow: hidden;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+}
+.booking-hero{
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
 
     .movie-title{ font-size:2.3rem; font-weight:800; }
     .movie-meta{ color:rgba(255,255,255,0.72); margin-bottom:10px; font-size:1rem; }
@@ -187,6 +201,37 @@
         .seat-label{ height:48px; font-size:0.8rem; }
         .screen{ width:100%; }
     }
+    .booking-hero::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        rgba(2,6,23,0.96),
+        rgba(2,6,23,0.82),
+        rgba(2,6,23,0.96)
+    );
+
+    z-index: 1;
+}
+    .booking-hero > *{
+    position: relative;
+    z-index: 2;
+}
+    .booking-hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: rgba(0,0,0,0.25);
+    z-index:1;
+}
+    .booking-hero{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
   </style>
 
 </head>
@@ -323,7 +368,8 @@
 
 <div class="container booking-container">
 
-  <div class="glass-card">
+  <div class="glass-card booking-hero"
+       th:style="'background-image: url(\'' + ${showtime.movie.posterUrl} + '\')'">
 
     <!-- ERROR -->
 
