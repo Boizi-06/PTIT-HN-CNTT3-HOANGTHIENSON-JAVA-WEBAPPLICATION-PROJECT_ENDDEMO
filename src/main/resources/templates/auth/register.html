@@ -2,142 +2,284 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng ký - Smart Cinema</title>
+    <title>Đăng ký - Boizi Cinema</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #141e30, #243b55);
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
+
+            /* 🎬 BACKGROUND POSTER */
+            background: url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+            position: relative;
+        }
+
+        /* LỚP OVERLAY TỐI */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(3px);
+        }
+
+        /* FLOATING LIGHT EFFECT */
+        body::after {
+            content: "";
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0,198,255,0.25), transparent 60%);
+            top: -100px;
+            left: -100px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(40px); }
+        }
+
+        .register-wrapper {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        /* GLASS CARD */
         .register-card {
-            border: none;
-            border-radius: 18px;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .register-header {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            padding: 25px;
             text-align: center;
+            padding: 25px;
             color: white;
+            background: linear-gradient(135deg, rgba(0,198,255,0.9), rgba(0,114,255,0.9));
         }
 
         .register-header h4 {
-            margin: 0;
             font-weight: 600;
-        }
-
-        .form-control {
-            border-radius: 10px;
-            padding: 12px;
-        }
-
-        .form-control:focus {
-            border-color: #00c6ff;
-            box-shadow: 0 0 0 0.2rem rgba(0,198,255,0.25);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border: none;
-            border-radius: 10px;
-            padding: 12px;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
         }
 
         .card-body {
             padding: 30px;
         }
 
+        label {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .form-control:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: #00c6ff;
+            box-shadow: 0 0 12px rgba(0,198,255,0.4);
+            color: #fff;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-register:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(0,198,255,0.4);
+        }
+
+        .error-text {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .register-wrapper {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* CARD GỌN HƠN */
+.register-card {
+    width: 100%;
+    max-width: 480px; /* nhỏ hơn */
+    border-radius: 18px;
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+
+    animation: fadeIn 0.8s ease;
+}
+
+/* HEADER NHỎ LẠI */
+.register-header {
+    text-align: center;
+    padding: 18px; /* giảm từ 25px */
+    color: white;
+}
+
+/* BODY GỌN */
+.card-body {
+    padding: 18px 22px; /* giảm mạnh */
+}
+
+/* INPUT GỌN HƠN */
+.form-control {
+    padding: 10px 12px; /* giảm từ 12-14 */
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+label {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+/* BUTTON GỌN */
+.btn-register {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+          .footer-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+            font-size: 14px;
+        }
+
         .footer-link a {
+            color: #4facfe;
+            font-weight: 600;
             text-decoration: none;
-            color: #00c6ff;
-            font-weight: 500;
         }
 
         .footer-link a:hover {
             text-decoration: underline;
         }
-
-        .form-label {
-            font-weight: 500;
-        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="card register-card">
+<div class="register-wrapper">
 
-                <div class="register-header">
-                    <h4>🎬 Smart Cinema</h4>
-                    <p class="mb-0">Tạo tài khoản để bắt đầu</p>
+    <div class="register-card">
+
+        <div class="register-header">
+            <h4>🎬 Boizi Cinema</h4>
+            <p class="mb-0">Tạo tài khoản để trải nghiệm phim</p>
+        </div>
+
+        <div class="card-body">
+
+            <form th:action="@{/register}"
+                  method="post"
+                  th:object="${registerRequest}">
+
+                <div class="mb-3">
+                    <label>Username</label>
+                    <input type="text" th:field="*{username}" class="form-control" placeholder="Nhập username">
+                    <div class="error-text" th:errors="*{username}"></div>
                 </div>
 
-                <div class="card-body">
-                    <form th:action="@{/register}" method="post" th:object="${registerRequest}">
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input type="email" th:field="*{email}" class="form-control" placeholder="Nhập email">
+                    <div class="error-text" th:errors="*{email}"></div>
+                </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Username</label>
-                                <input type="text" th:field="*{username}" class="form-control" placeholder="Nhập username" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
-                            </div>
-                        </div>
+                <div class="mb-3">
+                    <label>Mật khẩu</label>
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu">
+                    <div class="error-text" th:errors="*{password}"></div>
+                </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Mật khẩu</label>
-                            <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu" required>
-                        </div>
+                <div class="mb-3">
+                    <label>Xác nhận mật khẩu</label>
+                    <input type="password" th:field="*{confirmPassword}" class="form-control" placeholder="Nhập lại mật khẩu">
+                    <div class="error-text" th:errors="*{confirmPassword}"></div>
+                </div>
 
-                        <!-- ==================== THÊM XÁC NHẬN MẬT KHẨU ==================== -->
-                        <div class="mb-3">
-                            <label class="form-label">Xác nhận mật khẩu</label>
-                            <input type="password" th:field="*{confirmPassword}" class="form-control" placeholder="Nhập lại mật khẩu" required>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Họ tên</label>
-                                <input type="text" th:field="*{fullName}" class="form-control" placeholder="Nguyễn Văn A">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Số điện thoại</label>
-                                <input type="text" th:field="*{phone}" class="form-control" placeholder="0123456789">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success w-100">Đăng Ký</button>
-                    </form>
-
-                    <div class="text-center mt-4 footer-link">
-                        <p>Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label>Họ tên</label>
+                        <input type="text" th:field="*{fullName}" class="form-control">
                     </div>
 
+                    <div class="col-6 mb-3">
+                        <label>Số điện thoại</label>
+                        <input type="text" th:field="*{phone}" class="form-control">
+                    </div>
                 </div>
 
-            </div>
+                <button type="submit" class="btn btn-register w-100 mt-2">
+                    Đăng Ký
+                </button>
+                <div class="footer-link">
+                    Đã có tài khoản ?
+                    <a th:href="@{/login}">Đăng nhập</a>
+                </div>
+
+            </form>
+
         </div>
     </div>
+
 </div>
 
 </body>

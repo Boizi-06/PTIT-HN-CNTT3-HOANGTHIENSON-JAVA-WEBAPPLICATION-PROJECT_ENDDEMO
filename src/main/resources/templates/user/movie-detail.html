@@ -577,6 +577,23 @@
         .top-spacing{
     height:20px;
 }
+        .btn-trailer{
+    width: 100%;
+    border-radius: 14px;
+    padding: 12px;
+    font-weight: 600;
+
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+
+    transition: 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.btn-trailer:hover{
+    background: rgba(255,255,255,0.15);
+    transform: translateY(-2px);
+}
 
     </style>
 
@@ -784,6 +801,13 @@
                     <div class="description"
                          th:text="${movie.description}">
                     </div>
+                    <button type="button"
+                            class="btn btn-trailer text-white mt-2"
+                            data-bs-toggle="modal"
+                            th:attr="data-bs-target='#trailerModal__' + ${movie.id}">
+                        <i class="fas fa-play me-2"></i>
+                        Xem trailer
+                    </button>
 
                 </div>
 
@@ -1010,7 +1034,44 @@
     });
 
 </script>
+<div class="modal fade"
+     th:id="'trailerModal__' + ${movie.id}"
+     tabindex="-1">
 
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content bg-dark">
+
+            <div class="modal-header border-0">
+                <h5 class="text-white"
+                    th:text="${movie.title}">
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body p-0">
+
+                <div class="ratio ratio-16x9">
+
+                    <iframe th:src="${movie.trailerUrl}"
+                            allowfullscreen
+                            frameborder="0"
+                            loading="lazy">
+                    </iframe>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 
 </html>

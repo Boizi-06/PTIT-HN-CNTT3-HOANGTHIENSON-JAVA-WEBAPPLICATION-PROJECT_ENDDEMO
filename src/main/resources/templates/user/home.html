@@ -1093,75 +1093,77 @@
 
     <div class="container py-5">
 
-    <div class="row">
+        <div class="row">
 
-        <!-- MOVIES -->
+            <!-- MOVIES -->
 
-        <div class="col-lg-8">
+            <div class="col-lg-8">
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
 
-                <h2 class="section-title">
-                    Phim đang chiếu
-                </h2>
+                    <h2 class="section-title">
+                        Phim đang chiếu
+                    </h2>
 
-                <a href="/movies"
-                   class="text-decoration-none view-all-link">
+                    <a href="/movies"
+                       class="text-decoration-none view-all-link">
 
-                    Xem tất cả →
+                        Xem tất cả →
 
-                </a>
+                    </a>
 
-            </div>
+                </div>
 
-            <div class="row g-4"
-                 th:if="${not #lists.isEmpty(movies)}">
+                <div class="row g-4"
+                     th:if="${not #lists.isEmpty(movies)}">
 
-                <div class="col-md-6 col-lg-4"
-                     th:each="movie : ${movies}">
+                    <div class="col-md-6 col-lg-4"
+                         th:each="movie : ${movies}">
 
-                    <div class="movie-card h-100">
+                        <div class="movie-card h-100">
 
-                        <div class="movie-poster">
+                            <div class="movie-poster">
 
-                            <img th:src="${movie.posterUrl}"
-                                 th:alt="${movie.title}">
-                            <div class="movie-overlay"></div>
+                                <img th:src="${movie.posterUrl}"
+                                     th:alt="${movie.title}">
+                                <div class="movie-overlay"></div>
 
-                            <div class="movie-badge">
-                                HOT
+                                <div class="movie-badge">
+                                    HOT
+                                </div>
+
+                                <div class="movie-rating">
+                                    ⭐ 8.9
+                                </div>
+
                             </div>
 
-                            <div class="movie-rating">
-                                ⭐ 8.9
-                            </div>
+                            <div class="movie-body">
 
-                        </div>
+                                <div class="movie-title"
+                                     th:text="${movie.title}">
+                                </div>
 
-                        <div class="movie-body">
-
-                            <div class="movie-title"
-                                 th:text="${movie.title}">
-                            </div>
-
-                            <div class="movie-meta">
+                                <div class="movie-meta">
 
     <span>
         🎬 <span th:text="${movie.genre?.name}"></span>
     </span>
 
-                                <span>
+                                    <span>
         ⏱ <span th:text="${movie.duration}"></span> phút
     </span>
 
+                                </div>
+
+                                <a th:href="@{/movies/{id}(id=${movie.id})}"
+                                   class="btn btn-ticket text-white">
+
+                                    Đặt vé
+
+                                </a>
+
                             </div>
-
-                            <a th:href="@{/movies/{id}(id=${movie.id})}"
-                               class="btn btn-ticket text-white">
-
-                                Đặt vé
-
-                            </a>
 
                         </div>
 
@@ -1171,57 +1173,55 @@
 
             </div>
 
-        </div>
+            <!-- SIDEBAR -->
 
-        <!-- SIDEBAR -->
+            <div class="col-lg-4">
 
-        <div class="col-lg-4">
+                <h2 class="section-title">
+                    Khuyến mãi
+                </h2>
 
-            <h2 class="section-title">
-                Khuyến mãi
-            </h2>
+                <div class="promo-card promo-red">
 
-            <div class="promo-card promo-red">
+                    <h4 class="fw-bold">
+                        GIẢM 20%
+                    </h4>
 
-                <h4 class="fw-bold">
-                    GIẢM 20%
-                </h4>
+                    <p>
+                        Đặt vé trước 15h để nhận ưu đãi đặc biệt
+                    </p>
 
-                <p>
-                    Đặt vé trước 15h để nhận ưu đãi đặc biệt
-                </p>
+                </div>
 
-            </div>
+                <div class="promo-card promo-dark">
 
-            <div class="promo-card promo-dark">
+                    <h4>
+                        🍿 Combo Bắp Nước
+                    </h4>
 
-                <h4>
-                    🍿 Combo Bắp Nước
-                </h4>
+                    <p>
+                        Chỉ từ 89.000đ cực hấp dẫn
+                    </p>
 
-                <p>
-                    Chỉ từ 89.000đ cực hấp dẫn
-                </p>
+                </div>
 
-            </div>
+                <div class="promo-card promo-yellow">
 
-            <div class="promo-card promo-yellow">
+                    <h4 class="fw-bold">
+                        U22 ONLINE
+                    </h4>
 
-                <h4 class="fw-bold">
-                    U22 ONLINE
-                </h4>
+                    <p>
+                        Giảm tới 55K dành cho thành viên dưới 22 tuổi
+                    </p>
 
-                <p>
-                    Giảm tới 55K dành cho thành viên dưới 22 tuổi
-                </p>
+                </div>
 
             </div>
 
         </div>
 
     </div>
-
-</div>
 
 </section>
 
