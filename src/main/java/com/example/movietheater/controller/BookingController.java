@@ -81,13 +81,21 @@ public class BookingController {
     @PostMapping("/confirm")
     public String confirmBooking(
             @RequestParam Long showtimeId,
-            @RequestParam List<Long> seatIds,
+            @RequestParam(required = false) List<Long> seatIds,
             Model model
     ) {
 
         Showtime showtime = showtimeRepository
                 .findById(showtimeId)
                 .orElseThrow();
+
+        // ❗ FIX LỖI KHÔNG CHỌN GHẾ
+        if (seatIds == null || seatIds.isEmpty()) {
+            model.addAttribute("showtime", showtime);
+            model.addAttribute("seats", seatRepository.findByRoomId(showtime.getRoom().getId()));
+            model.addAttribute("error", "Bạn chưa chọn ghế nào!");
+            return "user/booking";
+        }
 
         List<Seat> selectedSeats =
                 seatRepository.findAllById(seatIds);
@@ -98,44 +106,21 @@ public class BookingController {
 
             String seatName = seat.getSeatName();
 
-            // VIP
-            if (seatName.startsWith("C")
-                    || seatName.startsWith("D")) {
-
+            if (seatName.startsWith("C") || seatName.startsWith("D")) {
                 totalPrice += 120000;
-
             }
-
-            // COUPLE
             else if (seatName.startsWith("E")) {
-
                 totalPrice += 180000;
-
             }
-
-            // STANDARD
             else {
-
                 totalPrice += 80000;
             }
         }
 
         model.addAttribute("showtime", showtime);
-
-        model.addAttribute(
-                "selectedSeats",
-                selectedSeats
-        );
-
-        model.addAttribute(
-                "seatIds",
-                seatIds
-        );
-
-        model.addAttribute(
-                "totalPrice",
-                totalPrice
-        );
+        model.addAttribute("selectedSeats", selectedSeats);
+        model.addAttribute("seatIds", seatIds);
+        model.addAttribute("totalPrice", totalPrice);
 
         return "user/booking-confirm";
     }
