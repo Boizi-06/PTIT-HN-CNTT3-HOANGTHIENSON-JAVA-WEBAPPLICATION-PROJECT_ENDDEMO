@@ -63,7 +63,7 @@ public class AuthController {
 
     @GetMapping({"/", "/home"})
     public String home(Model model, Authentication authentication) {
-        List<Movie> movies = movieRepository.findByActiveTrueOrderByReleaseDateDesc();
+        List<Movie> movies = movieRepository.findTop8ByOrderByReleaseDateDesc();
         model.addAttribute("movies", movies);
         if (authentication != null) {
             String username = authentication.getName();
